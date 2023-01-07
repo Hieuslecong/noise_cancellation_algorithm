@@ -1,1 +1,0 @@
-python save_image_simulation_pix2pixHD.py --data_image_out image_out --zoom 2000 --turning_point -1 --data_simulation D:\crack_simulation\Tex1000_1n_1cd__3p.txt --size_image 256 --num_img_out 1 --fisrt_crack 0
