@@ -1,0 +1,1 @@
+python test_model_v1.py --name_data_set crack --path_gt "D:\Tai Xuong0\crack Dr.Qin\CrackLS315_gt" --path_model D:\crack_simulation\Tex1001_1e --start_img 0 --end_img all --path_data_txt D:/crack_simulation/Tex1001_1e.txt --save_data True --path_data_mean D:/crack_simulation 

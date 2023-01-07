@@ -1,0 +1,6 @@
+python train_model_simulation.py --simulink_data D:/crack_simulation/continue.txt --path_model_save D:/crack_simulation --name_txt continue --path_data_save D:/crack_simulation --path_data_mean D:/crack_simulation
+python train_model_simulation.py --simulink_data D:/crack_simulation/Tex1000_1n_1cd__3p.txt --path_model_save D:/crack_simulation --name_txt Tex1000_1n_1cd__3p --path_data_save D:/crack_simulation --path_data_mean D:/crack_simulation
+python train_model_simulation.py --simulink_data D:/crack_simulation/Tex1001_1e.txt --path_model_save D:/crack_simulation --name_txt Tex1001_1e --path_data_save D:/crack_simulation --path_data_mean D:/crack_simulation
+python train_model_simulation.py --simulink_data D:/crack_simulation/Tex1000_cd_dd_3p.txt --path_model_save D:/crack_simulation --name_txt Tex1000_cd_dd_3p --path_data_save D:/crack_simulation --path_data_mean D:/crack_simulation
+
+python train_model_simulation.py --simulink_data D:/crack_simulation/data2000-5-15.txt --path_model_save D:/crack_simulation --name_txt data2000-5-15 --path_data_save D:/crack_simulation --path_data_mean D:/crack_simulation
