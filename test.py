@@ -43,7 +43,7 @@ from noise_cancellation.save_image_cancellation import *
 from noise_cancellation.model_evaluation import *
 
 # ##############################################################
-# #train model
+#train model
 # from model_linear.train_model_linear_simulation import *
 # matplotlib.use('Agg')
 # list_class_model=[Linear_Model_LM,Gaussian_GPR,Tree,SVM]
@@ -55,6 +55,7 @@ from noise_cancellation.model_evaluation import *
 # Snr_db=60
 # num_point_add =10 
 # train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig,save_model_ML,path_image_test,Snr_db,num_point_add)
+######################################################################3
 algos =  ["Deepcrack","EHCNN","FCN","HRNBM0.3","HED","Unet"]
 ###############################################################
 list_test=["train","test"]

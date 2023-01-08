@@ -36,7 +36,7 @@ def save_image_cancellation(str_model,path_save_model,algos,name_para,
         arr = []
         NUM=0
         image_paths = glob.glob("{}/*.png".format(seg_folder_path))
-        list_parameter = pd.read_excel('{}/{}_labeled.xlsx'.format(path_parameter,algo))
+        list_parameter = pd.read_excel('{}/{}_labeled.xlsx'.format(path_parameter,'data'))
         for f,path in enumerate(list_image_input):
             print(f+1,"/",len(list_image_input))
     # path = "/Users/doanquangmanh/Desktop/Manhtest/Research/GAPs/Deepcrack/GAPS384_test_0028_541_1.png"

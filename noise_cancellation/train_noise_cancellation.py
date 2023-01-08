@@ -46,50 +46,50 @@ def train_model_cancellation(name_para,path_save_model,algos,seed,folds,path_par
 			}
 			para =[5,6]
 		#"output_Data_EHR"
-		for algo in algos:
-			# Load dataset
-			dataset = pd.read_excel('{}/{}_labeled.xlsx'.format(path_parameter,algo))
-   			# Detemine feature cols
-			X = dataset.iloc[:, para].values
-			# Determine label col
-			y = dataset.iloc[:, -1].values
+		# for algo in algos:
+		# Load dataset
+		dataset = pd.read_excel('{}/{}_labeled.xlsx'.format(path_parameter,'data'))
+		# Detemine feature cols
+		X = dataset.iloc[:, para].values
+		# Determine label col
+		y = dataset.iloc[:, -1].values
 
-			class0 = np.where(y==0)[0]
-			class1 = np.where(y==1)[0]
-			if len(class0) > len(class1):
-				dataclass0 = X[class0[:len(class1)]]
-				dataclass1 = X[class1]
-				label0 = y[class0[:len(class1)]]
-				label1 = y[class1]
-			elif len(class0) < len(class1):
-				dataclass1 = X[class1[:len(class0)]]
-				dataclass0 = X[class0]
-				label1 = y[class1[:len(class0)]]
-				label0 = y[class0]
-			else:
-				dataclass1 = X[class1]
-				dataclass0 = X[class0]
-				label1 = y[class1]
-				label0 = y[class0]
+		class0 = np.where(y==0)[0]
+		class1 = np.where(y==1)[0]
+		if len(class0) > len(class1):
+			dataclass0 = X[class0[:len(class1)]]
+			dataclass1 = X[class1]
+			label0 = y[class0[:len(class1)]]
+			label1 = y[class1]
+		elif len(class0) < len(class1):
+			dataclass1 = X[class1[:len(class0)]]
+			dataclass0 = X[class0]
+			label1 = y[class1[:len(class0)]]
+			label0 = y[class0]
+		else:
+			dataclass1 = X[class1]
+			dataclass0 = X[class0]
+			label1 = y[class1]
+			label0 = y[class0]
 
-			# print(dataclass0.shape)
-			# print(dataclass1.shape)
-			# print(label0.shape)
-			# print(label1.shape)
-				
-			data_dict = dict()
-			for i,(train_index, test_index) in enumerate(kf.split(dataclass0)):
-				X_train_sub,X_test_sub = np.vstack((dataclass0[train_index],dataclass1[train_index])), np.vstack((dataclass0[test_index],dataclass1[test_index]))
-				y_train_sub,y_test_sub = np.hstack((label0[train_index],label1[train_index])), np.hstack((label0[test_index],label1[test_index]))
+		# print(dataclass0.shape)
+		# print(dataclass1.shape)
+		# print(label0.shape)
+		# print(label1.shape)
+			
+		data_dict = dict()
+		for i,(train_index, test_index) in enumerate(kf.split(dataclass0)):
+			X_train_sub,X_test_sub = np.vstack((dataclass0[train_index],dataclass1[train_index])), np.vstack((dataclass0[test_index],dataclass1[test_index]))
+			y_train_sub,y_test_sub = np.hstack((label0[train_index],label1[train_index])), np.hstack((label0[test_index],label1[test_index]))
 
-				data_dict["X_train_{}".format(i)] = np.array(X_train_sub)
-				data_dict["X_test_{}".format(i)] = np.array(X_test_sub)
-				data_dict["y_train_{}".format(i)] = np.array(y_train_sub)
-				data_dict["y_test_{}".format(i)] = np.array(y_test_sub)
-			data['X_train'] = np.vstack((data['X_train'],data_dict['X_train_{}'.format(k)]))
-			data['X_test'] = np.vstack((data['X_test'],data_dict['X_test_{}'.format(k)]))
-			data['y_train'] = np.hstack((data['y_train'],data_dict['y_train_{}'.format(k)]))
-			data['y_test'] = np.hstack((data['y_test'],data_dict['y_test_{}'.format(k)]))
+			data_dict["X_train_{}".format(i)] = np.array(X_train_sub)
+			data_dict["X_test_{}".format(i)] = np.array(X_test_sub)
+			data_dict["y_train_{}".format(i)] = np.array(y_train_sub)
+			data_dict["y_test_{}".format(i)] = np.array(y_test_sub)
+		data['X_train'] = np.vstack((data['X_train'],data_dict['X_train_{}'.format(k)]))
+		data['X_test'] = np.vstack((data['X_test'],data_dict['X_test_{}'.format(k)]))
+		data['y_train'] = np.hstack((data['y_train'],data_dict['y_train_{}'.format(k)]))
+		data['y_test'] = np.hstack((data['y_test'],data_dict['y_test_{}'.format(k)]))
 
 		data['X_train'] = np.delete(data['X_train'],0,0)
 		data['X_test'] = np.delete(data['X_test'],0,0)

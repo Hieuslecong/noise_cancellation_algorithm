@@ -134,16 +134,18 @@ def find_model_best_crack(data_simulation,data_crack,path_model,Snr_db,num_point
     point = np.append([-1], point)
     list_num_max, list_model, list_MAE_max, list_RMSE_max, list_hist_model, list_R2_max = [], [], [], [], [],[]
     for name_model in os.listdir(path_model):
-        #print(name_model)
+        print(name_model)
         path_folder_model = path_model+'/' + name_model
         k = 0
         out_data_max_model, list_name_model = [], []
         list_num, list_MAE, list_RMSE, list_R_squared, list_R2 = [], [], [], [], []
-        for path_model_son in os.listdir(path_folder_model):
+        loop = tqdm(os.listdir(path_folder_model))
+        #batch_idx, (data, targets) in enumerate(loop)
+        for batch_idx,path_model_son in enumerate(loop):
             #print(path_model_son)
             
             path_model_son = path_folder_model + "/" + path_model_son
-            print(path_model_son)
+            #print(path_model_son)
             model = joblib.load(path_model_son)
             i = int(path_model_son[-9:-6])
             data_simulation_son = data_simulation[point[i] + 1:point[i + 1], :]
@@ -173,7 +175,8 @@ def find_model_best_crack(data_simulation,data_crack,path_model,Snr_db,num_point
             list_num.append(i)
 
             if M1 < M2:
-                print(('RMSE :%.5f MAE: %.5f 1-R2: %.5f'%(RMSE_1,MAE_1,1-R2_1)))
+                #print(('RMSE :%.5f MAE: %.5f 1-R2: %.5f'%(RMSE_1,MAE_1,1-R2_1)))
+                loop.set_postfix(loss=1-R2_2)
                 list_MAE.append( MAE_1)
                 list_RMSE.append(RMSE_1)
                 list_R2.append(R2_1)
@@ -181,7 +184,8 @@ def find_model_best_crack(data_simulation,data_crack,path_model,Snr_db,num_point
                     list_hist_model.append(name_model)
                 #return x_end1, y_end1,RMSE_1,MAE_1,R2_1
             else:
-                print(('RMSE :%.5f MAE: %.5f 1-R2: %.5f'%(RMSE_2,MAE_2,1-R2_2)))
+                #print(('RMSE :%.5f MAE: %.5f 1-R2: %.5f'%(RMSE_2,MAE_2,1-R2_2)))
+                loop.set_postfix(loss=1-R2_2)
                 list_MAE.append(MAE_2)
                 list_RMSE.append(RMSE_2)
                 list_R2.append(R2_2)

@@ -134,7 +134,7 @@ def calculate_parameter_dataset(algos,save_folder_path,gt_folder_path,inputSeg_p
                 arr.append([list_img,A,E,fdmax,fdmean,max_RMSE,max_MAE,max_R2,la])
         #arr = np.array(arr)
     df = pd.DataFrame(arr)
-    df.to_excel("{}/{}_labeled.xlsx".format(save_folder_path,algo))
+    df.to_excel("{}/{}_labeled.xlsx".format(save_folder_path,'data'))
 if __name__ == '__main__':   
     total = 0
     algos = ["Deepcrack","EHCNN","FCN","HRNBM0.3","HED","Unet"]

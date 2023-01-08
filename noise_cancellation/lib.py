@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import pickle
+from tqdm import tqdm
 import random
 from sklearn.model_selection import GridSearchCV,RandomizedSearchCV, ParameterGrid
 from sklearn.metrics import confusion_matrix,accuracy_score,f1_score,recall_score,precision_score,fbeta_score
