@@ -44,37 +44,38 @@ from noise_cancellation.model_evaluation import *
 
 # ##############################################################
 #train model
-# from model_linear.train_model_linear_simulation import *
-# matplotlib.use('Agg')
-# list_class_model=[Linear_Model_LM,Gaussian_GPR,Tree,SVM]
-# show_fig= None
-# path_crack_simulation='./data/Tex1000_1n_1cd__3p.txt'
-# path_save ='./model_linear/model/'
-# save_model_ML = True
-# path_image_test ='D:/imgage_label/image_label.png'
-# Snr_db=60
-# num_point_add =10 
-# train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig,save_model_ML,path_image_test,Snr_db,num_point_add)
+from model_linear.train_model_linear_simulation import *
+matplotlib.use('Agg')
+list_class_model=[Linear_Model_LM,Gaussian_GPR,Tree,SVM]
+show_fig= None
+path_crack_simulation='./data/Tex1000_1n_1cd__3p.txt'
+path_save ='./model_linear/model/'
+save_model_ML = True
+path_image_test ='D:/imgage_label/image_label.png'
+Snr_db=60
+num_point_add =10 
+train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig,save_model_ML,path_image_test,Snr_db,num_point_add)
 ######################################################################3
 algos =  ["Deepcrack","EHCNN","FCN","HRNBM0.3","HED","Unet"]
 ###############################################################
 list_test=["train","test"]
-for typerun in list_test:
-    total = 0
-    #algos = ["Deepcrack","EHCNN","FCN","HRNBM0.3","HED","Unet"]
-    save_folder_path = "./output/out_excel/%s_parameter"%(typerun) # Path to output folder
-    #path GT
-    gt_folder_path = './data/image_GT'
-    # path image segmetation
-    inputSeg_path = './data/image_Seg/{}'.format(typerun)
-    # path data crack simulink
-    path_crack_txt = './data/Tex1000_1n_1cd__3p.txt'
-    #path model machine 
-    path_model_folder_input = './model_linear/model/Tex1000_1n_1cd__3p'
-    # path orig image
-    image_folder_path='./data/image/{}'.format(typerun)
-    calculate_parameter_dataset(algos,save_folder_path,gt_folder_path,inputSeg_path,
-           path_crack_txt,path_model_folder_input,image_folder_path)   
+# for typerun in list_test:
+#     total = 0
+#     #algos = ["Deepcrack","EHCNN","FCN","HRNBM0.3","HED","Unet"]
+#     save_folder_path = "./output/out_excel/%s_parameter"%(typerun) # Path to output folder
+#     #path GT
+#     gt_folder_path = './data/image_GT'
+#     # path image segmetation
+#     inputSeg_path = './data/image_Seg/{}'.format(typerun)
+#     # path data crack simulink
+#     path_crack_txt = './data/Tex1000_1n_1cd__3p.txt'
+#     #path model machine 
+#     path_model_folder_input = './model_linear/model/Tex1000_1n_1cd__3p'
+#     # path orig image
+#     image_folder_path='./data/image/{}'.format(typerun)
+#     
+# (algos,save_folder_path,gt_folder_path,inputSeg_path,
+#            path_crack_txt,path_model_folder_input,image_folder_path)   
 
            
 ############################################################################
@@ -95,7 +96,7 @@ for para_type in para_list:
     #algos = ["Deepcrack","EHCNN","FCN","HRNBM0.3","HED","Unet"]
     image_folder_path='./data/image/test'
     inputSeg_path = "./data/image_Seg/test" #Path to seg
-    list_image_input = glob.glob("{}/*.png".format('./data/image_Seg/test/Deepcrack'))[1:5]
+    list_image_input = glob.glob("{}/*.png".format('./data/image_Seg/test/Deepcrack'))[1:2]
     path_parameter_test='./output/out_excel/test_parameter'
     #list_parameter=pd.read_excel(path_parameter_test)
     str_model=0
@@ -104,9 +105,10 @@ for para_type in para_list:
     
     ################################################################################
     #algos = ["Deepcrack","EHCNN","FCN","HRNBM0.3","HED","Unet"]
-    list_image_in =glob.glob("{}/*.png".format('./data/image_Seg/test/Deepcrack'))[1:5]
+    list_image_in =glob.glob("{}/*.png".format('./data/image_Seg/test/Deepcrack'))[1:2]
     seg_folder_path ='./output/image_out/image_out_{}'.format(para_type)
     path_GT = './data/image_GT'
+    avg_list_precision,avg_list_Recall,avg_list_Accuracy,avg_list_F1=[],[],[],[]
     avg_list_precision,avg_list_Recall,avg_list_Accuracy,avg_list_F1=evaluation_dataset(
             algos,list_image_in,seg_folder_path,path_GT)
     print('-------------------------------------------------')
@@ -125,8 +127,8 @@ for para_type in para_list:
 
 
 ################################################################################
-algos = ["Deepcrack","EHCNN","FCN","HRNBM0.3"]
-list_image_in =glob.glob("{}/*.png".format('./data/image_Seg/test/Deepcrack'))
+#algos = ["Deepcrack","EHCNN","FCN","HRNBM0.3"]
+list_image_in =glob.glob("{}/*.png".format('./data/image_Seg/test/Deepcrack'))[1:2]
 seg_folder_path ='./data/image_Seg/test'
 path_GT = './data/image_GT'
 avg_list_precision,avg_list_Recall,avg_list_Accuracy,avg_list_F1=evaluation_dataset(

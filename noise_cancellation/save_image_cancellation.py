@@ -9,7 +9,7 @@ def save_image_cancellation(str_model,path_save_model,algos,name_para,
     """
     --------Change paths to GT,output and segmentation folder
     """
-    save_folder_path = "./output/image_area" # Path to output folder
+    save_folder_path = "./output/image_area/image" # Path to output folder
     save_folder_path1 = "./output/image_out/image_out_{}".format(name_para)
     #inputSeg_path = "/Users/doanquangmanh/Desktop/Manhtest/Research/GAPs" #Path to seg
     if not os.path.exists(save_folder_path):

@@ -17,7 +17,7 @@ def calculate_parameter_dataset(algos,save_folder_path,gt_folder_path,inputSeg_p
     img_txt=[]
     num=0
     list_img=[]
-    image_paths = glob.glob("{}/*.jpg".format(image_folder_path))[1:5]
+    image_paths = glob.glob("{}/*.jpg".format(image_folder_path))[1:3]
     #path_crack_simulation=r'D:\pix2pixHD\code\noise_cancellation_algorithm\data\Tex1000_1n_1cd__3p.txt'
     data_crack_simulation = pd.read_csv(path_crack_txt,
                     index_col=False,sep=",")
@@ -122,7 +122,7 @@ def calculate_parameter_dataset(algos,save_folder_path,gt_folder_path,inputSeg_p
                     crack_nor,crack_predict,max_RMSE, max_MAE, max_R2,name_model_best =find_model_best_crack(
                         data_crack_simulation,point_crack,path_model_folder_input,60,num_point_add=10)
                     #point_crack_train,max_RMSE, max_MAE, max_R2 = best_model_crack(point_crack)
-                    fig, ax = plt.subplots(figsize=(6, 6))
+                    #fig, ax = plt.subplots(figsize=(6, 6))
                     #x12, y12,RMSE ,MAE, R2 = return_data_crack(point_crack_train, point_crack)
                     print(name_model_best)
                     print(('RMSE :%s MAE: %s 1-R2: %s'%(max_RMSE,max_MAE,1-max_R2)))
