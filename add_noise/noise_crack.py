@@ -41,7 +41,12 @@ def add_noise(X_in,y_in,Snr_db,num_point):
         plt.title("signal with noise")
         plt.ylabel("Magnitude")
         plt.xlabel("Tine (s)")
-        plt.show()  
+        path = './output/save_grap'
+        if not os.path.exists(path):
+                os.mkdir(path)
+        path_save = path + 'exp' + str(Snr_db)+ '.png'
+        plt.savefig(path_save)
+        #plt.show()  
     #t= np.linspace(1, 100, 1000) # Generate 1000 samples fron 1 to 100
     #signal = 10*np.sin(t/(2*np.pi))
     X_out = np.resize(X_out, ([np.size(X_out), 1]))

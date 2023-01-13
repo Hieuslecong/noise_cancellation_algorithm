@@ -53,6 +53,7 @@ def train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig
     # load model
     for class_model in list_class_model:
         print(class_model)
+        #call and run all model in foulder
         for name,method in call_all_method(class_model).items():
             print("calling: {}".format(name))
             try:

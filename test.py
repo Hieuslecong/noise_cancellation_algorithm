@@ -41,6 +41,11 @@ from noise_cancellation.parameter_calculate_dataset import *
 from noise_cancellation.train_noise_cancellation import *
 from noise_cancellation.save_image_cancellation import *
 from noise_cancellation.model_evaluation import *
+from save_grap import *
+
+#############################
+# find SNR best in [["Crack_500","Cracktree","CrackForest","CRKWH_100","CrackLS315"]]
+SNR_best=find_SNR_best()
 
 # ##############################################################
 #train model
@@ -52,30 +57,30 @@ path_crack_simulation='./data/Tex1000_1n_1cd__3p.txt'
 path_save ='./model_linear/model/'
 save_model_ML = True
 path_image_test ='D:/imgage_label/image_label.png'
-Snr_db=60
+Snr_db=SNR_best
 num_point_add =10 
 train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig,save_model_ML,path_image_test,Snr_db,num_point_add)
 ######################################################################3
 algos =  ["Deepcrack","EHCNN","FCN","HRNBM0.3","HED","Unet"]
 ###############################################################
 list_test=["train","test"]
-# for typerun in list_test:
-#     total = 0
-#     #algos = ["Deepcrack","EHCNN","FCN","HRNBM0.3","HED","Unet"]
-#     save_folder_path = "./output/out_excel/%s_parameter"%(typerun) # Path to output folder
-#     #path GT
-#     gt_folder_path = './data/image_GT'
-#     # path image segmetation
-#     inputSeg_path = './data/image_Seg/{}'.format(typerun)
-#     # path data crack simulink
-#     path_crack_txt = './data/Tex1000_1n_1cd__3p.txt'
-#     #path model machine 
-#     path_model_folder_input = './model_linear/model/Tex1000_1n_1cd__3p'
-#     # path orig image
-#     image_folder_path='./data/image/{}'.format(typerun)
-#     
-# (algos,save_folder_path,gt_folder_path,inputSeg_path,
-#            path_crack_txt,path_model_folder_input,image_folder_path)   
+for typerun in list_test:
+    total = 0
+    #algos = ["Deepcrack","EHCNN","FCN","HRNBM0.3","HED","Unet"]
+    save_folder_path = "./output/out_excel/%s_parameter"%(typerun) # Path to output folder
+    #path GT
+    gt_folder_path = './data/image_GT'
+    # path image segmetation
+    inputSeg_path = './data/image_Seg/{}'.format(typerun)
+    # path data crack simulink
+    path_crack_txt = './data/Tex1000_1n_1cd__3p.txt'
+    #path model machine 
+    path_model_folder_input = './model_linear/model/Tex1000_1n_1cd__3p'
+    # path orig image
+    image_folder_path='./data/image/{}'.format(typerun)
+    
+(algos,save_folder_path,gt_folder_path,inputSeg_path,
+           path_crack_txt,path_model_folder_input,image_folder_path)   
 
            
 ############################################################################
