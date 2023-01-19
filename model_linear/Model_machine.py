@@ -46,11 +46,11 @@ class Linear_Model_LM:
         # LM_ARD
         model_ARDRegression = ARDRegression(compute_score=True)
         return 'LM_ARD', model_ARDRegression
-    def LM_MT_ElasticNet():
-            # model MultiTask
-        # LM_MT_ElasticNet
-        model_MultiTask = MultiTaskElasticNet(alpha=0.1)
-        return 'LM_MT_ElasticNet', model_MultiTask
+    # def LM_MT_ElasticNet():
+    #         # model MultiTask
+    #     # LM_MT_ElasticNet
+    #     model_MultiTask = MultiTaskElasticNet(alpha=0.1)
+    #     return 'LM_MT_ElasticNet', model_MultiTask
     def LM_Lasso():
             # model LassoLarsCV
         # LM_Lasso

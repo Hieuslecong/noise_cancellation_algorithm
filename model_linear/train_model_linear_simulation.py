@@ -85,7 +85,10 @@ def train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig
             X_crack,y_crack,X_crack2,y_crack2,x_simu,y_simu=nomalize_data_crack_to_simulation(np.hstack((x_simu,y_simu)),point_crack)
             #x_simu,y_simu=add_noise(x_simu,y_simu,Snr_db=60,num_point=50)
             # train model in list
-            model.fit(y_simu,x_simu)
+            try:
+                model.fit(y_simu,x_simu)
+            except:
+                print(name_model)
             MSA = mean_absolute_error(y_crack, model.predict(X_crack))
             # MSE
             MSE = mean_squared_error(y_crack, model.predict(X_crack))

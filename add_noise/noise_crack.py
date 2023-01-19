@@ -2,6 +2,8 @@
 from add_noise.lib import *
 from add_noise.noise_model import *
 import argparse
+import matplotlib
+matplotlib.use('Agg')
 def add_noise(X_in,y_in,Snr_db,num_point):
     # cloumn1 = data[:, 0]
     # point = np.argwhere(cloumn1 == 0)[:, 0]
@@ -36,16 +38,23 @@ def add_noise(X_in,y_in,Snr_db,num_point):
         Y_out = np.resize(Y_out, ([np.size(Y_out), 1]))
     
     if show_grap is not None:  
-        fig, ax = plt.subplots(figsize=(6, 6))
+        # fig, ax = plt.subplots(figsize=(6, 6))
+        plt.figure(figsize=(6, 6))
         plt.plot(X_out+ 0.05, Y_out)
+        plt.plot(X_in, y_in)
         plt.title("signal with noise")
         plt.ylabel("Magnitude")
         plt.xlabel("Tine (s)")
-        path = './output/save_grap'
+        path = './output/save_grap/'
         if not os.path.exists(path):
                 os.mkdir(path)
-        path_save = path + 'exp' + str(Snr_db)+ '.png'
-        plt.savefig(path_save)
+        path_save = path + 'exp' + str(Snr_db)+ '_.png'
+        #plt.savefig(path_save)
+        plt.figure().clear()
+        plt.close()
+        plt.close('all')
+        plt.cla()
+        plt.clf()
         #plt.show()  
     #t= np.linspace(1, 100, 1000) # Generate 1000 samples fron 1 to 100
     #signal = 10*np.sin(t/(2*np.pi))
