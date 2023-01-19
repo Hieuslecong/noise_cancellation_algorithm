@@ -22,7 +22,7 @@ def calculate_SNR_noise_dataset(algos,path_model_folder_input,path_crack_txt,SNR
     data_crack_simulation = (np.array(data_crack_simulation))
     list_R2, list_MAE, list_RMSE,list_M2 = [], [], [], []
     for algo in algos:
-        list_image=glob.glob('./data/data_crack/%s/GT/*.png'%algo)
+        list_image=glob.glob('./data/data_crack/%s/GT/*'%algo)
         arg_RMSE,arg_R2,arg_MAE=[],[],[]
         for k,path_img in  enumerate(list_image):
             img_input = cv2.imread(path_img)
@@ -70,7 +70,7 @@ def save_fig(df,name):
     #plt.yticks([1000, 2000, 4000, 6000, 8000, 10000, 12000, 15000, 18000])
     #plt.title('Sales data')
     #plt.show()
-    path = './output/save_grap'
+    path = './output/save_grap/'
     if not os.path.exists(path):
             os.mkdir(path)
     path_save = path + name + '.png'
@@ -80,6 +80,8 @@ def save_fig(df,name):
     plt.close('all')
     plt.cla()
     plt.clf()
+    data_model_2 = pd.DataFrame(df)
+    data_model_2.to_excel('./output/out_excel'+'/data_%s.xlsx'%name)  
 ###############################
 def find_SNR_best():
     MAE_data,RMSE_data, R2_data,M2_data,lst_SNR=[],[],[],[],[]
@@ -111,7 +113,7 @@ def find_SNR_best():
     df_R2=pd.DataFrame(data=R2_data,  index=lst_SNR,columns=algos_data)
     df_M2=pd.DataFrame(data=M2_data, index=lst_SNR, columns=algos_data)
     df_M2['sum'] =  df_M2.sum(axis=1)
-    SNR_best = df_M2.index[df_M2['sum'].idxmin()]
+    SNR_best = df_M2['sum'].idxmin()
     save_fig(df_RMSE,'RMSE')
     save_fig(df_MAE,'MAE')
     save_fig(df_R2,'R2')

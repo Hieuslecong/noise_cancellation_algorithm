@@ -86,7 +86,7 @@ def train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig
             #x_simu,y_simu=add_noise(x_simu,y_simu,Snr_db=60,num_point=50)
             # train model in list
             try:
-                model.fit(y_simu,x_simu)
+                model.fit(y_simu,x_simu.ravel())
             except:
                 print(name_model)
             MSA = mean_absolute_error(y_crack, model.predict(X_crack))
