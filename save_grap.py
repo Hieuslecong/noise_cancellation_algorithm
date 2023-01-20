@@ -36,7 +36,7 @@ def find_SNR_process(SNR_num):
     # M2_data.append(list_M2)
     lst_SNR.append(SNR_num)
     # arr.append([MAE_data,RMSE_data,R2_data,M2_data,lst_SNR])
-    #shutil.rmtree(path_model_folder_input)
+    shutil.rmtree(path_model_folder_input)
     return list_R2, list_MAE, list_RMSE,list_M2,lst_SNR
 
 def clear():
