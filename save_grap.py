@@ -4,7 +4,39 @@ from noise_cancellation.function_cancellation import *
 from sklearn.cluster import DBSCAN
 from skimage import measure
 from model_linear.train_model_linear_simulation import *
+import shutil
 matplotlib.use('Agg')
+#import multiprocessing
+from test import *
+from joblib import Parallel, delayed
+
+def find_SNR_process(SNR_num,algos_data):
+    global MAE_data,RMSE_data, R2_data,M2_data,lst_SNR
+    #algos_data =  ["Crack_500"]#,"Cracktree","CrackForest","CRKWH_100","CrackLS315"]
+    list_class_model=[Linear_Model_LM,Gaussian_GPR,Tree,SVM] #,Gaussian_GPR,Tree,SVM
+    show_fig= None
+    path_crack_simulation='./data/Tex1000_1n_1cd__3p.txt'
+    path_save ='./model_linear/model/'
+    save_model_ML = True
+    path_image_test ='D:/imgage_label/image_label.png'
+    Snr_db=SNR_num
+    num_point_add =10 
+    train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig,save_model_ML,path_image_test,Snr_db,num_point_add)
+    path_crack_txt='./data/Tex1000_1n_1cd__3p.txt'
+    path_model_folder_input= './model_linear/model/Tex1000_1n_1cd__3p_SNR_%s'%SNR_num
+    #SNR_num = 1
+    #num_point_add =10
+    list_R2, list_MAE, list_RMSE,list_M2=calculate_SNR_noise_dataset(algos_data,path_model_folder_input
+                                                            ,path_crack_txt,SNR_num,num_point_add)
+    
+    MAE_data.append(list_MAE)
+    RMSE_data.append(list_RMSE)
+    R2_data.append(list_R2)
+    M2_data.append(list_M2)
+    lst_SNR.append(SNR_num)
+    shutil.rmtree(path_model_folder_input)
+        
+    #return MAE_data,RMSE_data,R2_data,M2_data,lst_SNR
 
 def clear():
     os.system(" cls ")
@@ -83,6 +115,26 @@ def save_fig(df,name):
     data_model_2 = pd.DataFrame(df)
     data_model_2.to_excel('./output/out_excel'+'/data_%s.xlsx'%name)  
 ###############################
+def find_best_SNR_process():
+    global MAE_data,RMSE_data, R2_data,M2_data,lst_SNR
+    MAE_data,RMSE_data, R2_data,M2_data,lst_SNR=[],[],[],[],[]
+    algos_data =  ["CFD","Crack_500","CrackLS315","CrackTree260","CRKWH100"]
+   
+    Parallel(n_jobs=3)((find_SNR_process, (num_SNR,algos_data,), {}) for num_SNR in range(10,20,5))
+    #Parallel(n_jobs=3)(delayed(find_SNR_process)(num_SNR,algos_data)for num_SNR in range(10,20,5))
+
+    df_RMSE=pd.DataFrame(data=MAE_data, index=lst_SNR, columns=algos_data)    
+    df_MAE=pd.DataFrame(data=RMSE_data,  index=lst_SNR,columns=algos_data)
+    df_R2=pd.DataFrame(data=R2_data,  index=lst_SNR,columns=algos_data)
+    df_M2=pd.DataFrame(data=M2_data, index=lst_SNR, columns=algos_data)
+    df_M2['sum'] =  df_M2.sum(axis=1)
+    SNR_best = df_M2['sum'].idxmin()
+    save_fig(df_RMSE,'RMSE')
+    save_fig(df_MAE,'MAE')
+    save_fig(df_R2,'R2')
+    save_fig(df_M2,'M2')
+    return SNR_best
+
 def find_SNR_best():
     MAE_data,RMSE_data, R2_data,M2_data,lst_SNR=[],[],[],[],[]
     #algos_data =  ["Crack_500"]#,"Cracktree","CrackForest","CRKWH_100","CrackLS315"]
@@ -98,11 +150,15 @@ def find_SNR_best():
         num_point_add =10 
         train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig,save_model_ML,path_image_test,Snr_db,num_point_add)
         path_crack_txt='./data/Tex1000_1n_1cd__3p.txt'
-        path_model_folder_input= './model_linear/model/Tex1000_1n_1cd__3p'
+        path_model_folder_input= './model_linear/model/Tex1000_1n_1cd__3p_%s'%SNR_num
         #SNR_num = 1
         #num_point_add =10
         list_R2, list_MAE, list_RMSE,list_M2=calculate_SNR_noise_dataset(algos_data,path_model_folder_input
                                                                 ,path_crack_txt,SNR_num,num_point_add)
+        try:
+            os.rmdir(path_model_folder_input)
+        except:
+            print('done')
         MAE_data.append(list_MAE)
         RMSE_data.append(list_RMSE)
         R2_data.append(list_R2)

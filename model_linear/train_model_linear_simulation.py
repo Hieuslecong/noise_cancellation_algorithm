@@ -74,7 +74,7 @@ def train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig
         list_MSE_mean, list_MAE_mean, list_RMSE_mean, list_R_squared_mean, list_Accuracy = [], [], [], [], [] 
         i = 0
         
-        for i in range(0, len(point) - 1):
+        for i in range(0, 1):
             data1 = ((data[point[i] + 1:point[i + 1], :]))+1
             
             #X_crack,y_crack,x_simu,y_simu=nomalize_data_crack_to_simulation(data1,point_crack)
@@ -104,7 +104,7 @@ def train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig
             # plt.show()
             # save model 
             if save_model_ML is not None:
-                save_model(model,i,path_save= path_save,name_model=name_model,name_txt=name_simuation)
+                save_model(model,i,path_save= path_save,name_model=name_model,name_txt=name_simuation,num_SNR=Snr_db)
             if show_fig is not None:
                 fig, ax = plt.subplots(figsize=(6, 6)) # Defines ax variable by creating an empty plot
                 # Define the data to be plotted

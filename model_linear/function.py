@@ -79,13 +79,14 @@ def nomalize_data_crack_to_simulation(data_simulation,data_crack):
     return  x_out,y_out,x_out2,y_out2,x_simu,y_simu
     
 
-def save_model(model,i,path_save,name_model,name_txt):
+def save_model(model,i,path_save,name_model,name_txt,num_SNR):
+    name_txt =  name_txt + '_SNR_'+str(num_SNR)
     try:
-        os.makedirs(path_save + name_txt )  
+        os.makedirs(path_save +name_txt)  
     except:
         print('done make dir') 
     try:
-        os.makedirs(path_save + name_txt + '/' + name_model)
+        os.makedirs(path_save + name_txt +'/' + name_model)
     except:
         print('done make dir') 
             

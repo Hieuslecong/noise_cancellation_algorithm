@@ -23,7 +23,7 @@ def add_noise(X_in,y_in,Snr_db,num_point):
     #plt.plot(t, signal)
     X_out=[]
     Y_out=[]
-    show_grap=None
+    show_grap=True
     for k in range(0,len(X_in)-1):
         point1_x=X_in[k,0]
         point1_y=y_in[k,0]
@@ -48,7 +48,7 @@ def add_noise(X_in,y_in,Snr_db,num_point):
         path = './output/save_grap/'
         if not os.path.exists(path):
                 os.mkdir(path)
-        path_save = path + 'exp' + str(Snr_db)+ '_.png'
+        path_save = path + 'exp_' + str(Snr_db)+ '_.png'
         #plt.savefig(path_save)
         plt.figure().clear()
         plt.close()

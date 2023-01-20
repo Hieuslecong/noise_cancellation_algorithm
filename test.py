@@ -42,10 +42,30 @@ from noise_cancellation.train_noise_cancellation import *
 from noise_cancellation.save_image_cancellation import *
 from noise_cancellation.model_evaluation import *
 from save_grap import *
-
 #############################
 # find SNR best in [["Crack_500","Cracktree","CrackForest","CRKWH_100","CrackLS315"]]
-SNR_best=find_SNR_best()
+    # global MAE_data,RMSE_data, R2_data,M2_data,lst_SNR
+    # MAE_data,RMSE_data, R2_data,M2_data,lst_SNR=[],[],[],[],[]
+    # algos_data =  ["CFD","Crack_500","CrackLS315","CrackTree260","CRKWH100"]
+    # processes = [multiprocessing.Process(target=find_SNR_process, args=[num_SNR,algos_data]) 
+    #             for num_SNR in range(10,20,5)]
+    # # start the processes
+    # for process in processes:
+    #     process.start()
+    # # wait for completion
+    # for process in processes:
+    #     process.join()
+    # df_RMSE=pd.DataFrame(data=MAE_data, index=lst_SNR, columns=algos_data)    
+    # df_MAE=pd.DataFrame(data=RMSE_data,  index=lst_SNR,columns=algos_data)
+    # df_R2=pd.DataFrame(data=R2_data,  index=lst_SNR,columns=algos_data)
+    # df_M2=pd.DataFrame(data=M2_data, index=lst_SNR, columns=algos_data)
+    # df_M2['sum'] =  df_M2.sum(axis=1)
+   # SNR_best = df_M2['sum'].idxmin()
+    # save_fig(df_RMSE,'RMSE')
+    # save_fig(df_MAE,'MAE')
+    # save_fig(df_R2,'R2')
+    # save_fig(df_M2,'M2')
+SNR_best=find_best_SNR_process()
 
 # ##############################################################
 #train model
@@ -75,14 +95,14 @@ for typerun in list_test:
     # path data crack simulink
     path_crack_txt = './data/Tex1000_1n_1cd__3p.txt'
     #path model machine 
-    path_model_folder_input = './model_linear/model/Tex1000_1n_1cd__3p'
+    path_model_folder_input = './model_linear/model/Tex1000_1n_1cd__3p_%s'%SNR_best
     # path orig image
     image_folder_path='./data/image/{}'.format(typerun)
     
 (algos,save_folder_path,gt_folder_path,inputSeg_path,
-           path_crack_txt,path_model_folder_input,image_folder_path)   
+        path_crack_txt,path_model_folder_input,image_folder_path)   
 
-           
+        
 ############################################################################
 para_list=['EHR','EH','ER','HR']
 for para_type in para_list:
@@ -126,7 +146,7 @@ for para_type in para_list:
         print('done make folder') 
     path_save= path_1  +'/_%s_'%(date_object)  
     data_out_2 = {'name image':algos,'precision': avg_list_precision,'Recall': avg_list_Recall, 
-                  'Accuracy': avg_list_Accuracy, 'F1': avg_list_F1} 
+                'Accuracy': avg_list_Accuracy, 'F1': avg_list_F1} 
     data_model_2 = pd.DataFrame(data_out_2)
     data_model_2.to_excel(path_save+'/data_mean_gt_%s.xlsx'%para_type)    
 
