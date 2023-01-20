@@ -65,7 +65,8 @@ from save_grap import *
     # save_fig(df_MAE,'MAE')
     # save_fig(df_R2,'R2')
     # save_fig(df_M2,'M2')
-SNR_best=find_best_SNR_process()
+    
+SNR_best = find_best_SNR_process()
 
 # ##############################################################
 #train model

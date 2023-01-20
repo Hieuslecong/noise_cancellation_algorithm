@@ -6,12 +6,13 @@ from skimage import measure
 from model_linear.train_model_linear_simulation import *
 import shutil
 matplotlib.use('Agg')
-#import multiprocessing
-from test import *
+import multiprocessing
 from joblib import Parallel, delayed
+algos_data =  ["CFD","Crack_500","CrackLS315","CrackTree260","CRKWH100"]
 
-def find_SNR_process(SNR_num,algos_data):
-    global MAE_data,RMSE_data, R2_data,M2_data,lst_SNR
+def find_SNR_process(SNR_num):
+    #global MAE_data,RMSE_data, R2_data,M2_data,lst_SNR
+    lst_SNR=[]
     #algos_data =  ["Crack_500"]#,"Cracktree","CrackForest","CRKWH_100","CrackLS315"]
     list_class_model=[Linear_Model_LM,Gaussian_GPR,Tree,SVM] #,Gaussian_GPR,Tree,SVM
     show_fig= None
@@ -29,14 +30,14 @@ def find_SNR_process(SNR_num,algos_data):
     list_R2, list_MAE, list_RMSE,list_M2=calculate_SNR_noise_dataset(algos_data,path_model_folder_input
                                                             ,path_crack_txt,SNR_num,num_point_add)
     
-    MAE_data.append(list_MAE)
-    RMSE_data.append(list_RMSE)
-    R2_data.append(list_R2)
-    M2_data.append(list_M2)
+    # MAE_data.append(list_MAE)
+    # RMSE_data.append(list_RMSE)
+    # R2_data.append(list_R2)
+    # M2_data.append(list_M2)
     lst_SNR.append(SNR_num)
-    shutil.rmtree(path_model_folder_input)
-        
-    #return MAE_data,RMSE_data,R2_data,M2_data,lst_SNR
+    # arr.append([MAE_data,RMSE_data,R2_data,M2_data,lst_SNR])
+    #shutil.rmtree(path_model_folder_input)
+    return list_R2, list_MAE, list_RMSE,list_M2,lst_SNR
 
 def clear():
     os.system(" cls ")
@@ -116,17 +117,25 @@ def save_fig(df,name):
     data_model_2.to_excel('./output/out_excel'+'/data_%s.xlsx'%name)  
 ###############################
 def find_best_SNR_process():
-    global MAE_data,RMSE_data, R2_data,M2_data,lst_SNR
+    #global MAE_data,RMSE_data, R2_data,M2_data,lst_SNR
     MAE_data,RMSE_data, R2_data,M2_data,lst_SNR=[],[],[],[],[]
-    algos_data =  ["CFD","Crack_500","CrackLS315","CrackTree260","CRKWH100"]
-   
-    Parallel(n_jobs=3)((find_SNR_process, (num_SNR,algos_data,), {}) for num_SNR in range(10,20,5))
-    #Parallel(n_jobs=3)(delayed(find_SNR_process)(num_SNR,algos_data)for num_SNR in range(10,20,5))
+    #algos_data =  ["CFD","Crack_500","CrackLS315","CrackTree260","CRKWH100"]
+    out = Parallel(n_jobs=3)((find_SNR_process, (num_SNR,), {}) for num_SNR in range(10,20,5))
+    for out_put in out:
+        R2_data.append(out_put[0])
+        MAE_data.append(out_put[1])
+        RMSE_data.append(out_put[2])
+        M2_data.append(out_put[3])
+        lst_SNR.append(out_put[4][0])
+        
+        print(MAE_data,RMSE_data, R2_data,M2_data,lst_SNR)
+        #Parallel(n_jobs=3)(delayed(find_SNR_process)(num_SNR,algos_data)for num_SNR in range(10,20,5))
 
     df_RMSE=pd.DataFrame(data=MAE_data, index=lst_SNR, columns=algos_data)    
     df_MAE=pd.DataFrame(data=RMSE_data,  index=lst_SNR,columns=algos_data)
     df_R2=pd.DataFrame(data=R2_data,  index=lst_SNR,columns=algos_data)
     df_M2=pd.DataFrame(data=M2_data, index=lst_SNR, columns=algos_data)
+    print(df_M2,df_R2)
     df_M2['sum'] =  df_M2.sum(axis=1)
     SNR_best = df_M2['sum'].idxmin()
     save_fig(df_RMSE,'RMSE')
@@ -177,4 +186,4 @@ def find_SNR_best():
     return SNR_best
 
 if __name__ == '__main__':
-    SNR_best = find_SNR_best()
+    SNR_best = find_best_SNR_process()
