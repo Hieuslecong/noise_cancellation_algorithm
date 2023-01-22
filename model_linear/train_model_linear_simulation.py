@@ -46,7 +46,7 @@ def train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig
 
     # careate a list of crack names
     number_crack = []
-    for i in range(0,  10):#len(point) -1
+    for i in range(0,  len(point) -1):#len(point) -1
         number_crack_name = 'num_crack_%s' % i
         number_crack.append(number_crack_name)
 
@@ -74,7 +74,7 @@ def train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig
         list_MSE_mean, list_MAE_mean, list_RMSE_mean, list_R_squared_mean, list_Accuracy = [], [], [], [], [] 
         i = 0
         
-        for i in range(0,  10):#len(point) -1
+        for i in range(0,  len(point) -1):#len(point) -1
             data1 = ((data[point[i] + 1:point[i + 1], :]))+1
             
             #X_crack,y_crack,x_simu,y_simu=nomalize_data_crack_to_simulation(data1,point_crack)
