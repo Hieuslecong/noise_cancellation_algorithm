@@ -49,7 +49,7 @@ def add_noise(X_in,y_in,Snr_db,num_point):
         if not os.path.exists(path):
                 os.mkdir(path)
         path_save = path + 'exp_' + str(Snr_db)+ '_.png'
-        plt.savefig(path_save)
+        #plt.savefig(path_save)
         plt.figure().clear()
         plt.close()
         plt.close('all')

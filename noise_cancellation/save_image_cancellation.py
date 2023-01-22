@@ -31,8 +31,7 @@ def save_image_cancellation(str_model,path_save_model,algos,name_para,
     for algo in algos:
         seg_folder_path = "{}/{}".format(inputSeg_path,algo) # Path to seg
         output_subfolder = "{}/{}".format(save_folder_path1,algo)
-        if not os.path.exists(output_subfolder):
-            os.mkdir(output_subfolder)
+         
         arr = []
         NUM=0
         image_paths = glob.glob("{}/*.png".format(seg_folder_path))

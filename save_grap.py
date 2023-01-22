@@ -14,7 +14,7 @@ def find_SNR_process(SNR_num):
     #global MAE_data,RMSE_data, R2_data,M2_data,lst_SNR
     lst_SNR=[]
     #algos_data =  ["Crack_500"]#,"Cracktree","CrackForest","CRKWH_100","CrackLS315"]
-    list_class_model=[Linear_Model_LM,Gaussian_GPR,Tree,SVM] #,Gaussian_GPR,Tree,SVM
+    list_class_model=[Linear_Model_LM,Tree,SVM] #,Gaussian_GPR,Tree,SVM
     show_fig= None
     path_crack_simulation='./data/Tex1000_1n_1cd__3p.txt'
     path_save ='./model_linear/model/'
@@ -36,7 +36,7 @@ def find_SNR_process(SNR_num):
     # M2_data.append(list_M2)
     lst_SNR.append(SNR_num)
     # arr.append([MAE_data,RMSE_data,R2_data,M2_data,lst_SNR])
-    #shutil.rmtree(path_model_folder_input)
+    shutil.rmtree(path_model_folder_input)
     return list_R2, list_MAE, list_RMSE,list_M2,lst_SNR
 
 def clear():
@@ -90,18 +90,23 @@ def save_fig(df,name):
     CRKWH_100   = df ['CRKWH100'].tolist()
     CrackLS315   = df ['CrackLS315'].tolist()
     #moisturizerSalesData = df ['moisturizer'].tolist()
-    plt.plot(SNR_num, Crack_500,   label = 'Crack_500 Data', marker='o', linewidth=3)
-    plt.plot(SNR_num, Cracktree,   label = 'Cracktree Data',  marker='o', linewidth=3)
-    plt.plot(SNR_num, CrackForest, label = 'CrackForest Data', marker='o', linewidth=3)
-    plt.plot(SNR_num, CRKWH_100, label = 'CRKWH_100 Data', marker='o', linewidth=3)
-    plt.plot(SNR_num, CrackLS315, label = 'CrackLS315 Data', marker='o', linewidth=3)
+    mean_data =  df.mean(axis=1).tolist()
+    
+    plt.plot(SNR_num, Crack_500,   label = 'Crack_500', marker='.', linewidth=3)
+    plt.plot(SNR_num, Crack_500,   label = 'Crack_500', marker='.', linewidth=3)
+    plt.plot(SNR_num, Cracktree,   label = 'Cracktree',  marker='.', linewidth=3)
+    plt.plot(SNR_num, CrackForest, label = 'CrackForest', marker='.', linewidth=3)
+    plt.plot(SNR_num, CRKWH_100, label = 'CRKWH_100', marker='.', linewidth=3)
+    plt.plot(SNR_num, CrackLS315, label = 'CrackLS315', marker='.', linewidth=3)
+    plt.plot(SNR_num, mean_data,   label = 'mean', marker='*', linewidth=5)
     #plt.plot(monthList, moisturizerSalesData, label = 'ToothPaste Sales Data', marker='o', linewidth=3)
     plt.xlabel('SNR Number')
     #plt.ylabel('Sales units in number')
-    plt.legend(loc='upper left')
+    #plt.legend(loc='best',  bbox_to_anchor=(0, 0, 1, 0.9))
+    plt.legend(loc='upper center',bbox_to_anchor=(0.5,1.35),ncol=3)
     plt.xticks(SNR_num)
     #plt.yticks([1000, 2000, 4000, 6000, 8000, 10000, 12000, 15000, 18000])
-    #plt.title('Sales data')
+    plt.title('%s'%name)
     #plt.show()
     path = './output/save_grap/'
     if not os.path.exists(path):
@@ -120,7 +125,7 @@ def find_best_SNR_process():
     #global MAE_data,RMSE_data, R2_data,M2_data,lst_SNR
     MAE_data,RMSE_data, R2_data,M2_data,lst_SNR=[],[],[],[],[]
     #algos_data =  ["CFD","Crack_500","CrackLS315","CrackTree260","CRKWH100"]
-    out = Parallel(n_jobs=3)((find_SNR_process, (num_SNR,), {}) for num_SNR in range(10,20,5))
+    out = Parallel(n_jobs=4)((find_SNR_process, (num_SNR,), {}) for num_SNR in range(5,90,5))
     for out_put in out:
         R2_data.append(out_put[0])
         MAE_data.append(out_put[1])
@@ -136,12 +141,13 @@ def find_best_SNR_process():
     df_R2=pd.DataFrame(data=R2_data,  index=lst_SNR,columns=algos_data)
     df_M2=pd.DataFrame(data=M2_data, index=lst_SNR, columns=algos_data)
     print(df_M2,df_R2)
-    df_M2['sum'] =  df_M2.sum(axis=1)
+    df_M2['sum'] =  df_M2.mean(axis=1)
     SNR_best = df_M2['sum'].idxmin()
     save_fig(df_RMSE,'RMSE')
     save_fig(df_MAE,'MAE')
     save_fig(df_R2,'R2')
     save_fig(df_M2,'M2')
+    
     return SNR_best
 
 def find_SNR_best():
