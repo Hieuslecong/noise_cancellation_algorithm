@@ -14,7 +14,7 @@ def find_SNR_process(SNR_num):
     #global MAE_data,RMSE_data, R2_data,M2_data,lst_SNR
     lst_SNR=[]
     #algos_data =  ["Crack_500"]#,"Cracktree","CrackForest","CRKWH_100","CrackLS315"]
-    list_class_model=[Linear_Model_LM,Tree,SVM] #,Gaussian_GPR,Tree,SVM
+    list_class_model=[Linear_Model_LM,Gaussian_GPR,Tree,SVM] #,Gaussian_GPR,Tree,SVM
     show_fig= None
     path_crack_simulation='./data/Tex1000_1n_1cd__3p.txt'
     path_save ='./model_linear/model/'

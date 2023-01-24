@@ -100,8 +100,8 @@ for typerun in list_test:
     # path orig image
     image_folder_path='./data/image/{}'.format(typerun)
     
-(algos,save_folder_path,gt_folder_path,inputSeg_path,
-        path_crack_txt,path_model_folder_input,image_folder_path)   
+    calculate_parameter_dataset(algos,save_folder_path,gt_folder_path,inputSeg_path,
+            path_crack_txt,path_model_folder_input,image_folder_path)   
 
         
 ############################################################################
@@ -122,7 +122,7 @@ for para_type in para_list:
     #algos = ["Deepcrack","EHCNN","FCN","HRNBM0.3","HED","Unet"]
     image_folder_path='./data/image/test'
     inputSeg_path = "./data/image_Seg/test" #Path to seg
-    list_image_input = glob.glob("{}/*.png".format('./data/image_Seg/test/Deepcrack'))[1:2]
+    list_image_input = glob.glob("{}/*.png".format('./data/image_Seg/test/Deepcrack'))
     path_parameter_test='./output/out_excel/test_parameter'
     #list_parameter=pd.read_excel(path_parameter_test)
     str_model=0
@@ -131,7 +131,7 @@ for para_type in para_list:
     
     ################################################################################
     #algos = ["Deepcrack","EHCNN","FCN","HRNBM0.3","HED","Unet"]
-    list_image_in =glob.glob("{}/*.png".format('./data/image_Seg/test/Deepcrack'))[1:2]
+    list_image_in =glob.glob("{}/*.png".format('./data/image_Seg/test/Deepcrack'))
     seg_folder_path ='./output/image_out/image_out_{}'.format(para_type)
     path_GT = './data/image_GT'
     avg_list_precision,avg_list_Recall,avg_list_Accuracy,avg_list_F1=[],[],[],[]

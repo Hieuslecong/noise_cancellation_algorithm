@@ -36,7 +36,7 @@ def Accuracy1(GT,seg,beta):
     F = (1+beta)*(np.mean(r)*np.mean(p))/(beta*np.mean(p)+np.mean(r))
     return F,np.mean(p),np.mean(r)
 
-def evaluation_dataset(algos,list_image_in,seg_folder_path,path_GT):
+def  evaluation_dataset(algos,list_image_in,seg_folder_path,path_GT):
     list_image,list_precision,list_Recall,list_Accuracy,list_F1=[],[],[],[],[]
     avg_list_image,avg_list_precision,avg_list_Recall,avg_list_Accuracy,avg_list_F1=[],[],[],[],[]
     #avg_list_image1,avg_list_precision1,avg_list_Recall1,avg_list_Accuracy1,avg_list_F11=[],[],[],[],[]
