@@ -158,8 +158,8 @@ def find_best_SNR_process():
     nummodel_use = pd.DataFrame(nummodel_use)
     nummodel_use.to_excel('./output/out_excel/num_model_use.xlsx') 
     plt.barh(ticks,counts, align='center')
-    plt.xticks(ticks, labels)
-    plt.xticks(rotation=90)
+    plt.yticks(ticks, labels)
+    #plt.xticks(rotation=90)
     #plt.show()
     path_save =  './output/save_grap/' + 'hist_model' + '.png'
     plt.savefig(path_save)
