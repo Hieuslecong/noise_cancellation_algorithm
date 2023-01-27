@@ -46,7 +46,8 @@ def train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig
 
     # careate a list of crack names
     number_crack = []
-    for i in range(0,  len(point) -1):#len(point) -1
+    #for i in range(0,  len(point) -1):
+    for i in range(0,  1):#len(point) -1
         number_crack_name = 'num_crack_%s' % i
         number_crack.append(number_crack_name)
 
@@ -73,8 +74,8 @@ def train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig
         list_MSE, list_MSA, list_RMSE, list_R_squared, list_Accuracy = [], [], [], [], []
         list_MSE_mean, list_MAE_mean, list_RMSE_mean, list_R_squared_mean, list_Accuracy = [], [], [], [], [] 
         i = 0
-        
-        for i in range(0,  len(point) -1):#len(point) -1
+        #for i in range(0,  len(point) -1):
+        for i in range(0,  1):#len(point) -1
             data1 = ((data[point[i] + 1:point[i + 1], :]))+1
             
             #X_crack,y_crack,x_simu,y_simu=nomalize_data_crack_to_simulation(data1,point_crack)
@@ -134,7 +135,7 @@ if __name__ == '__main__':
     path_crack_simulation=r'D:\pix2pixHD\code\noise_cancellation_algorithm\data\Tex1000_1n_1cd__3p.txt'
     path_save = './model_linear/model/'
     save_model_ML = True
-    path_image_test ='D:/imgage_label/image_label.png'
+    path_image_test ='./data/image_label.png'
     Snr_db=60
     num_point_add =10
     train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig,save_model_ML,path_image_test,Snr_db,num_point_add)

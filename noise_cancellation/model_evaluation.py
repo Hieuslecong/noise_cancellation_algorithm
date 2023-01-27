@@ -113,6 +113,6 @@ if __name__ == '__main__':
     except:
         print('done make folder') 
     path_save= path_1  +'_%s_'%(date_object)  
-    data_out_2 = {'name image':algos,'precision': avg_list_precision,'Recall': avg_list_Recall, 'Accuracy': avg_list_Accuracy, 'F1': avg_list_F1, 'precision1': avg_list_precision1,'Recal1l': avg_list_Recall1, 'Accuracy1': avg_list_Accuracy1, 'F11': avg_list_F11 } 
+    data_out_2 = {'name image':algos,'precision': avg_list_precision,'Recall': avg_list_Recall, 'Accuracy': avg_list_Accuracy, 'F1': avg_list_F1, } 
     data_model_2 = pd.DataFrame(data_out_2)
     data_model_2.to_excel(path_save+'/mean/data_mean_gt_RMR.xlsx')

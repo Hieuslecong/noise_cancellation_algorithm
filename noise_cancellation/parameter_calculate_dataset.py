@@ -2,7 +2,7 @@ from .lib import *
 from .function_cancellation import *
 #data set
 def calculate_parameter_dataset(algos,save_folder_path,gt_folder_path,inputSeg_path,
-         path_crack_txt,path_model_folder_input,image_folder_path):
+         path_crack_txt,path_model_folder_input,image_folder_path,SNR_best):
     """
     --------Change paths to GT,output and segmentation folder
     """
@@ -119,8 +119,8 @@ def calculate_parameter_dataset(algos,save_folder_path,gt_folder_path,inputSeg_p
                     # Sort 2D numpy array by 2nd Column
                         point_crack = point_crack[point_crack[:,
                                                         columnIndex].argsort()]
-                    crack_nor,crack_predict,max_RMSE, max_MAE, max_R2,name_model_best =find_model_best_crack(
-                        data_crack_simulation,point_crack,path_model_folder_input,60,num_point_add=10)
+                    crack_nor,crack_predict,max_RMSE, max_MAE, max_R2,name_model_best,index_model =find_model_best_crack(
+                        data_crack_simulation,point_crack,path_model_folder_input,SNR_best,num_point_add=10)
                     #point_crack_train,max_RMSE, max_MAE, max_R2 = best_model_crack(point_crack)
                     #fig, ax = plt.subplots(figsize=(6, 6))
                     #x12, y12,RMSE ,MAE, R2 = return_data_crack(point_crack_train, point_crack)

@@ -44,28 +44,6 @@ from noise_cancellation.model_evaluation import *
 from save_grap import *
 #############################
 # find SNR best in [["Crack_500","Cracktree","CrackForest","CRKWH_100","CrackLS315"]]
-    # global MAE_data,RMSE_data, R2_data,M2_data,lst_SNR
-    # MAE_data,RMSE_data, R2_data,M2_data,lst_SNR=[],[],[],[],[]
-    # algos_data =  ["CFD","Crack_500","CrackLS315","CrackTree260","CRKWH100"]
-    # processes = [multiprocessing.Process(target=find_SNR_process, args=[num_SNR,algos_data]) 
-    #             for num_SNR in range(10,20,5)]
-    # # start the processes
-    # for process in processes:
-    #     process.start()
-    # # wait for completion
-    # for process in processes:
-    #     process.join()
-    # df_RMSE=pd.DataFrame(data=MAE_data, index=lst_SNR, columns=algos_data)    
-    # df_MAE=pd.DataFrame(data=RMSE_data,  index=lst_SNR,columns=algos_data)
-    # df_R2=pd.DataFrame(data=R2_data,  index=lst_SNR,columns=algos_data)
-    # df_M2=pd.DataFrame(data=M2_data, index=lst_SNR, columns=algos_data)
-    # df_M2['sum'] =  df_M2.sum(axis=1)
-   # SNR_best = df_M2['sum'].idxmin()
-    # save_fig(df_RMSE,'RMSE')
-    # save_fig(df_MAE,'MAE')
-    # save_fig(df_R2,'R2')
-    # save_fig(df_M2,'M2')
-    
 SNR_best = find_best_SNR_process()
 
 # ##############################################################
@@ -77,11 +55,12 @@ show_fig= None
 path_crack_simulation='./data/Tex1000_1n_1cd__3p.txt'
 path_save ='./model_linear/model/'
 save_model_ML = True
-path_image_test ='D:/imgage_label/image_label.png'
+path_image_test ='./data/image_label.png'
 Snr_db=SNR_best
 num_point_add =10 
 train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig,save_model_ML,path_image_test,Snr_db,num_point_add)
 ######################################################################3
+# calculate_parameter_dataset 
 algos =  ["Deepcrack","EHCNN","FCN","HRNBM0.3","HED","Unet"]
 ###############################################################
 list_test=["train","test"]
@@ -96,14 +75,14 @@ for typerun in list_test:
     # path data crack simulink
     path_crack_txt = './data/Tex1000_1n_1cd__3p.txt'
     #path model machine 
-    path_model_folder_input = './model_linear/model/Tex1000_1n_1cd__3p_%s'%SNR_best
+    path_model_folder_input = './model_linear/model/Tex1000_1n_1cd__3p_SNR_%s'%SNR_best
     # path orig image
     image_folder_path='./data/image/{}'.format(typerun)
     
     calculate_parameter_dataset(algos,save_folder_path,gt_folder_path,inputSeg_path,
-            path_crack_txt,path_model_folder_input,image_folder_path)   
+            path_crack_txt,path_model_folder_input,image_folder_path,SNR_best)   
 
-        
+# train model cancellation and evaluation_dataset    
 ############################################################################
 para_list=['EHR','EH','ER','HR']
 for para_type in para_list:
@@ -122,7 +101,7 @@ for para_type in para_list:
     #algos = ["Deepcrack","EHCNN","FCN","HRNBM0.3","HED","Unet"]
     image_folder_path='./data/image/test'
     inputSeg_path = "./data/image_Seg/test" #Path to seg
-    list_image_input = glob.glob("{}/*.png".format('./data/image_Seg/test/Deepcrack'))
+    list_image_input = glob.glob("{}/*.png".format('./data/image_Seg/test/Deepcrack'))[1:2]
     path_parameter_test='./output/out_excel/test_parameter'
     #list_parameter=pd.read_excel(path_parameter_test)
     str_model=0
@@ -131,7 +110,8 @@ for para_type in para_list:
     
     ################################################################################
     #algos = ["Deepcrack","EHCNN","FCN","HRNBM0.3","HED","Unet"]
-    list_image_in =glob.glob("{}/*.png".format('./data/image_Seg/test/Deepcrack'))
+    #list_image_in =glob.glob("{}/*".format('./data/image_Seg/test/Deepcrack'))
+    list_image_in =glob.glob("{}/*".format('./data/image_Seg/test/Deepcrack'))[1:2]
     seg_folder_path ='./output/image_out/image_out_{}'.format(para_type)
     path_GT = './data/image_GT'
     avg_list_precision,avg_list_Recall,avg_list_Accuracy,avg_list_F1=[],[],[],[]
@@ -154,6 +134,7 @@ for para_type in para_list:
 
 ################################################################################
 #algos = ["Deepcrack","EHCNN","FCN","HRNBM0.3"]
+#list_image_in =glob.glob("{}/*.png".format('./data/image_Seg/test/Deepcrack'))
 list_image_in =glob.glob("{}/*.png".format('./data/image_Seg/test/Deepcrack'))[1:2]
 seg_folder_path ='./data/image_Seg/test'
 path_GT = './data/image_GT'

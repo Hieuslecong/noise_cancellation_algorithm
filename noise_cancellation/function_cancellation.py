@@ -223,7 +223,7 @@ def find_model_best_crack(data_simulation,data_crack,path_model,Snr_db,num_point
                                               ,index_model,data_simulation,path_model,Snr_db)
     # name_excel_data_mean2 = 'E:/data_image_label3.xlsx' 
     # data_model_1.to_excel(name_excel_data_mean2)
-    return  crack_nor,crack_predict,max_RMSE, max_MAE, max_R2,name_model_best    
+    return  crack_nor,crack_predict,max_RMSE, max_MAE, max_R2,name_model_best ,index_model  
         
     
 if __name__ == '__main__':   

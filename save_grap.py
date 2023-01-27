@@ -19,7 +19,7 @@ def find_SNR_process(SNR_num):
     path_crack_simulation='./data/Tex1000_1n_1cd__3p.txt'
     path_save ='./model_linear/model/'
     save_model_ML = True
-    path_image_test ='D:/imgage_label/image_label.png'
+    path_image_test ='./data/image_label.png'
     Snr_db=SNR_num
     num_point_add =10 
     train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig,save_model_ML,path_image_test,Snr_db,num_point_add)
@@ -27,7 +27,7 @@ def find_SNR_process(SNR_num):
     path_model_folder_input= './model_linear/model/Tex1000_1n_1cd__3p_SNR_%s'%SNR_num
     #SNR_num = 1
     #num_point_add =10
-    list_R2, list_MAE, list_RMSE,list_M2=calculate_SNR_noise_dataset(algos_data,path_model_folder_input
+    list_R2, list_MAE, list_RMSE,list_M2,list_model ,list_num_crack=calculate_SNR_noise_dataset(algos_data,path_model_folder_input
                                                             ,path_crack_txt,SNR_num,num_point_add)
     
     # MAE_data.append(list_MAE)
@@ -37,7 +37,7 @@ def find_SNR_process(SNR_num):
     lst_SNR.append(SNR_num)
     # arr.append([MAE_data,RMSE_data,R2_data,M2_data,lst_SNR])
     shutil.rmtree(path_model_folder_input)
-    return list_R2, list_MAE, list_RMSE,list_M2,lst_SNR
+    return list_R2, list_MAE, list_RMSE,list_M2,lst_SNR,list_model ,list_num_crack
 
 def clear():
     os.system(" cls ")
@@ -53,7 +53,7 @@ def calculate_SNR_noise_dataset(algos,path_model_folder_input,path_crack_txt,SNR
     data_crack_simulation = pd.read_csv(path_crack_txt,
                     index_col=False,sep=",")
     data_crack_simulation = (np.array(data_crack_simulation))
-    list_R2, list_MAE, list_RMSE,list_M2 = [], [], [], []
+    list_R2, list_MAE, list_RMSE,list_M2,list_model,list_num_crack = [],[],[],[],[],[]
     for algo in algos:
         list_image=glob.glob('./data/data_crack/%s/GT/*'%algo)
         arg_RMSE,arg_R2,arg_MAE=[],[],[]
@@ -71,16 +71,18 @@ def calculate_SNR_noise_dataset(algos,path_model_folder_input,path_crack_txt,SNR
                 continue
             if len(single_crack(point_crack)) >= 2:
                 continue
-            crack_nor,crack_predict,max_RMSE, max_MAE, max_R2,name_model_best =find_model_best_crack(
+            crack_nor,crack_predict,max_RMSE, max_MAE, max_R2,name_model_best,index_model =find_model_best_crack(
                         data_crack_simulation,point_crack,path_model_folder_input,SNR_num,num_point_add)
             arg_RMSE.append(max_RMSE)
             arg_R2.append(max_R2)
             arg_MAE.append(max_MAE)
+            list_model.append(name_model_best)
+            list_num_crack.append(index_model)
         list_RMSE.append(sum(arg_RMSE) / len(arg_RMSE))
         list_MAE.append(sum(arg_MAE) / len(arg_MAE))
         list_R2.append(sum(arg_R2) / len(arg_R2))
         list_M2.append(sum(arg_RMSE) / len(arg_RMSE)+sum(arg_MAE) / len(arg_MAE)+1-sum(arg_R2) / len(arg_R2))
-    return list_R2, list_MAE, list_RMSE,list_M2   
+    return list_R2, list_MAE, list_RMSE,list_M2,list_model ,list_num_crack  
 def save_fig(df,name):
     #["Crack_500","Cracktree","CrackForest","CRKWH_100","CrackLS315"]
     SNR_num  = df.index
@@ -92,18 +94,18 @@ def save_fig(df,name):
     #moisturizerSalesData = df ['moisturizer'].tolist()
     mean_data =  df.mean(axis=1).tolist()
     
-    plt.plot(SNR_num, Crack_500,   label = 'Crack_500', marker='.', linewidth=3)
-    plt.plot(SNR_num, Crack_500,   label = 'Crack_500', marker='.', linewidth=3)
-    plt.plot(SNR_num, Cracktree,   label = 'Cracktree',  marker='.', linewidth=3)
-    plt.plot(SNR_num, CrackForest, label = 'CrackForest', marker='.', linewidth=3)
-    plt.plot(SNR_num, CRKWH_100, label = 'CRKWH_100', marker='.', linewidth=3)
-    plt.plot(SNR_num, CrackLS315, label = 'CrackLS315', marker='.', linewidth=3)
-    plt.plot(SNR_num, mean_data,   label = 'mean', marker='*', linewidth=5)
+    #plt.plot(SNR_num, Crack_500,   label = 'Crack_500', marker='.')
+    plt.plot(SNR_num, Crack_500,   label = 'Crack_500')
+    plt.plot(SNR_num, Cracktree,   label = 'Cracktree')
+    plt.plot(SNR_num, CrackForest, label = 'CrackForest')
+    plt.plot(SNR_num, CRKWH_100, label = 'CRKWH_100')
+    plt.plot(SNR_num, CrackLS315, label = 'CrackLS315')
+    plt.plot(SNR_num, mean_data,   label = 'mean', marker='o', linewidth=2)
     #plt.plot(monthList, moisturizerSalesData, label = 'ToothPaste Sales Data', marker='o', linewidth=3)
     plt.xlabel('SNR Number')
     #plt.ylabel('Sales units in number')
     #plt.legend(loc='best',  bbox_to_anchor=(0, 0, 1, 0.9))
-    plt.legend(loc='upper center',bbox_to_anchor=(0.5,1.35),ncol=3)
+    leg=plt.legend(loc='upper left',bbox_to_anchor=(1,1),ncol=1)
     plt.xticks(SNR_num)
     #plt.yticks([1000, 2000, 4000, 6000, 8000, 10000, 12000, 15000, 18000])
     plt.title('%s'%name)
@@ -112,7 +114,7 @@ def save_fig(df,name):
     if not os.path.exists(path):
             os.mkdir(path)
     path_save = path + name + '.png'
-    plt.savefig(path_save)
+    plt.savefig(path_save,bbox_extra_artists=(leg,),bbox_inches='tight')
     plt.figure().clear()
     plt.close()
     plt.close('all')
@@ -123,19 +125,19 @@ def save_fig(df,name):
 ###############################
 def find_best_SNR_process():
     #global MAE_data,RMSE_data, R2_data,M2_data,lst_SNR
-    MAE_data,RMSE_data, R2_data,M2_data,lst_SNR=[],[],[],[],[]
+    MAE_data,RMSE_data, R2_data,M2_data,lst_SNR,list_model,list_num_crack=[],[],[],[],[],[],[]
     #algos_data =  ["CFD","Crack_500","CrackLS315","CrackTree260","CRKWH100"]
-    out = Parallel(n_jobs=4)((find_SNR_process, (num_SNR,), {}) for num_SNR in range(5,90,5))
+    out = Parallel(n_jobs=8)((find_SNR_process, (num_SNR,), {}) for num_SNR in range(5,90,5))
     for out_put in out:
         R2_data.append(out_put[0])
         MAE_data.append(out_put[1])
         RMSE_data.append(out_put[2])
         M2_data.append(out_put[3])
         lst_SNR.append(out_put[4][0])
-        
+        list_model.append(out_put[5])
+        list_num_crack.append(out_put[6])
         print(MAE_data,RMSE_data, R2_data,M2_data,lst_SNR)
         #Parallel(n_jobs=3)(delayed(find_SNR_process)(num_SNR,algos_data)for num_SNR in range(10,20,5))
-
     df_RMSE=pd.DataFrame(data=MAE_data, index=lst_SNR, columns=algos_data)    
     df_MAE=pd.DataFrame(data=RMSE_data,  index=lst_SNR,columns=algos_data)
     df_R2=pd.DataFrame(data=R2_data,  index=lst_SNR,columns=algos_data)
@@ -147,7 +149,40 @@ def find_best_SNR_process():
     save_fig(df_MAE,'MAE')
     save_fig(df_R2,'R2')
     save_fig(df_M2,'M2')
+    #################################################################################
+    # hist model 
+    labels, counts = np.unique(np.array(list_model).ravel(),return_counts=True) #gives you a histogram of your array 'a'
+    ticks = range(len(counts))
+    ##############################################################
+    nummodel_use = {'name image':labels,'precision':counts } 
+    nummodel_use = pd.DataFrame(nummodel_use)
+    nummodel_use.to_excel('./output/out_excel/num_model_use.xlsx') 
+    plt.barh(ticks,counts, align='center')
+    plt.xticks(ticks, labels)
+    plt.xticks(rotation=90)
+    #plt.show()
+    path_save =  './output/save_grap/' + 'hist_model' + '.png'
+    plt.savefig(path_save)
+    plt.figure().clear()
+    plt.close()
+    plt.close('all')
+    plt.cla()
+    plt.clf()
+    #############################################################
+    # hist num crack 
     
+    plt.hist(np.array(list_num_crack).ravel())
+    plt.xlabel('num crack')
+    #plt.show()
+    path_save =  './output/save_grap/' + 'hist_num_crack' + '.png'
+    plt.savefig(path_save)
+    plt.figure().clear()
+    plt.close()
+    plt.close('all')
+    plt.cla()
+    plt.clf()
+    
+    #########################################################################
     return SNR_best
 
 def find_SNR_best():
@@ -160,12 +195,12 @@ def find_SNR_best():
         path_crack_simulation='./data/Tex1000_1n_1cd__3p.txt'
         path_save ='./model_linear/model/'
         save_model_ML = True
-        path_image_test ='D:/imgage_label/image_label.png'
+        path_image_test ='./data/image_label.png'
         Snr_db=SNR_num
         num_point_add =10 
         train_model_linear(list_class_model,path_crack_simulation,path_save,show_fig,save_model_ML,path_image_test,Snr_db,num_point_add)
         path_crack_txt='./data/Tex1000_1n_1cd__3p.txt'
-        path_model_folder_input= './model_linear/model/Tex1000_1n_1cd__3p_%s'%SNR_num
+        path_model_folder_input= './model_linear/model/Tex1000_1n_1cd__3p_SNR_%s'%SNR_num
         #SNR_num = 1
         #num_point_add =10
         list_R2, list_MAE, list_RMSE,list_M2=calculate_SNR_noise_dataset(algos_data,path_model_folder_input
@@ -189,6 +224,7 @@ def find_SNR_best():
     save_fig(df_MAE,'MAE')
     save_fig(df_R2,'R2')
     save_fig(df_M2,'M2')
+    
     return SNR_best
 
 if __name__ == '__main__':
